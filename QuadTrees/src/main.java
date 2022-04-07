@@ -57,43 +57,29 @@ class QuadTree{
     }//computePower2
 
     public void loadImage(File inFile,int[][] imgAry){
-        Scanner scFile = null;
-        Scanner scL = null;
-        int r;
-        int c;
-        int data = 0;
-        String strData = null;
+    Scanner sc = null;
+    String stS = null;
+    int data = 0;
+    int r,c;
+    try{
+        sc = new Scanner(inFile);
+    }catch(IOException e){
 
-        try {
-            scFile = new Scanner(inFile);
-        }
-        catch(IOException exp){
-            exp.printStackTrace();
-        }
-        String firstLine = scFile.nextLine();
-        //System.out.println("first: " + firstLine);
-        scFile.useDelimiter(" ");
-        String afterFirstLine = null;
-        r = 0;
-        while (scFile.hasNextLine()){
-            afterFirstLine = scFile.nextLine();
-            System.out.println("After: " + afterFirstLine);
-           /* scL = new Scanner(afterFirstLine);
-            scL.useDelimiter(" ");*/
-
-            while(r < numRows){
-                c = 0;
-                while(c < numCols){
-                    //while(scL.hasNextLine()){
-                        strData = scFile.next();
-                        data = Integer.parseInt(strData);
-                        imgAry[r][c] = data;
-                        c++;
-                    //}
-                }
-                r++;
+    }
+    sc.nextLine();
+    r= 0;
+    while(sc.hasNext()){
+        while(r < numRows){
+            c = 0;
+            while(c < numCols){
+               stS = sc.next();
+               data = Integer.parseInt(stS);
+               imgAry[r][c] = data;
+               c++;
             }
+            r++;
         }
+    }
     }//loadImage
 
     public void zero2DAry(){
@@ -127,69 +113,56 @@ class QuadTree{
 
 public class main {
     public static void main(String[] args) {
-        System.out.println("Hello");
-        File f1 = new File("G:\\SchoolDloads\\QC2021-2022\\Spring_2022\\DesignAndAnalysis\\Codes\\QuadTrees\\src\\inFile.txt");
-        File outFile2 = new File("outFile2.txt");
-
-        Scanner sc = null;
-        Scanner sc1 = null;
-        FileWriter fw = null;
+        FileWriter fw;
         PrintWriter pw = null;
+        File f1 = null;
+        File outFile2 = new File("outFile2.txt");
+        Scanner sc = null;
+        Scanner scFirstLine = null;
         try{
+            f1 = new File("G:\\SchoolDloads\\QC2021-2022\\Spring_2022\\DesignAndAnalysis\\Codes\\ASyed_Project6_Java\\QuadTrees\\src\\inFile.txt");
             sc = new Scanner(f1);
             fw = new FileWriter(outFile2);
-            pw = new PrintWriter(fw);
+            pw =new PrintWriter(fw);
         }
-        catch (IOException exp) {
-// TODO Auto-generated catch block
-            exp.printStackTrace();
-        }//try-catch
+        catch(IOException e){
 
-
-       /* String st1 = null;
-        while(sc.hasNextLine()) {
-            st1 = sc.nextLine();
-            System.out.println(st1);
-            pw.print(st1);
-            pw.println();
-        }*/
-        /*print(pw, "sdjkfhs");
-        print(pw, "sajhdasjkdh" );
-        sc.close();
-        pw.close();*/
-
+        }
         String firstLine = sc.nextLine();
-        String numRStr, numCStr, minVStr, maxVStr;
-        int numRInt = 0;
-        int numCInt = 0;
-        int minVInt = 0;
-        int maxVInt = 0;
-        sc1 = new Scanner(firstLine);
-        sc1.useDelimiter(" ");
-        while(sc1.hasNextLine()){
-            numRStr = sc1.next();
-            numRInt = Integer.parseInt(numRStr);
-            numCStr = sc1.next();
-            numCInt = Integer.parseInt(numCStr);
-            minVStr = sc1.next();
-            minVInt = Integer.parseInt(minVStr);
-            maxVStr = sc1.next();
-            maxVInt = Integer.parseInt(maxVStr);
-        } //while
-
-        QuadTree qT = new QuadTree(numRInt, numCInt, minVInt, maxVInt);
-        int power2 = qT.computePower2(qT.numRows, qT.numCols);
+        String rowS, colS, minValS, maxValS;
+        int rowI = 0;
+        int colI = 0;
+        int minValI = 0;
+        int maxValI = 0;
+        scFirstLine = new Scanner(firstLine);
+        scFirstLine.useDelimiter(" ");
+        while(scFirstLine.hasNext()){
+            rowS = scFirstLine.next();
+            colS = scFirstLine.next();
+            minValS = scFirstLine.next();
+            maxValS = scFirstLine.next();
+            rowI = Integer.parseInt(rowS);
+            colI = Integer.parseInt(colS);
+            minValI = Integer.parseInt(minValS);
+            maxValI = Integer.parseInt(maxValS);
+        }
+        QuadTree qt = new QuadTree(rowI, colI, minValI, maxValI);
+        //System.out.println(qt.numRows + " " + qt.numCols + " " +qt.minVal + " " + qt.maxVal);
+        int power2 = qt.computePower2(qt.numRows, qt.numCols);
         pw.print("power2: " + power2);
         pw.println();
-        qT.imgAry = new int[power2][power2];
-        qT.loadImage(f1,qT.imgAry);
+        qt.imgAry = new int [power2][power2];
+        qt.loadImage(f1,qt.imgAry);
 
+        for(int i = 0; i < qt.imgAry.length; i++){
+            for(int j = 0; j < qt.imgAry.length; j++){
+                pw.print(qt.imgAry[i][j]);
+            }
+            pw.println();
+        }
         pw.close();
         sc.close();
-    }//inner main
+    }
 
-    public static void print(PrintWriter p, String s){
-        p.println(s);
-    }//print
 
 }//outer main
